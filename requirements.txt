@@ -1,0 +1,12 @@
+pandas==2.3.2
+numpy==2.3.2
+yfinance==0.2.40
+websockets==10.4
+alpaca-trade-api==3.2.0
+alpha_vantage==2.3.1
+python-dotenv==1.0.1
+pandas-datareader==0.10.0
+streamlit==1.38.0
+matplotlib==3.8.4
+requests==2.32.5
+SQLAlchemy==2.0.32
