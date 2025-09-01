@@ -1,0 +1,22 @@
+﻿# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+
+# Virtual env
+.venv/
+
+# Secrets / local config
+.env
+
+# Data / artifacts
+*.db
+cache/
+.streamlit/
+.ipynb_checkpoints/
+
+# OS cruft
+.DS_Store
+Thumbs.db
