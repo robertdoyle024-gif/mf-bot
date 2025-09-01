@@ -19,12 +19,13 @@ def _get_columns(con: sqlite3.Connection, name: str) -> list[str]:
 class DBLog:
     """
     Logs backtests to SQLite and adapts to either trade schema:
-      A) trades(ts, action, symbol, price, qty, stop, take_profit, note)  <-- your current
-      B) trades(ts, symbol, side, qty, price, pnl, note)                  <-- alt
+      A) trades(ts, action, symbol, price, qty, stop, take_profit, note)
+      B) trades(ts, symbol, side, qty, price, pnl, note)
     Always creates 'equity(ts,equity)' if missing.
     """
     def __init__(self, path: Optional[str] = None):
-        self.path = path or os.getenv("DB_PATH", "simple_bot.db")
+        env_path = os.getenv("DB_PATH", "simple_bot.db")
+        self.path: str = (path or env_path) or "simple_bot.db"
         folder = os.path.dirname(self.path)
         if folder:
             os.makedirs(folder, exist_ok=True)
@@ -35,7 +36,6 @@ class DBLog:
         self.equity_cols = _get_columns(self.con, "equity")
 
     def _ensure_tables(self):
-        # ensure trades table exists (if you only had positions)
         if not _table_exists(self.con, "trades"):
             self.con.execute("""
                 CREATE TABLE IF NOT EXISTS trades (
@@ -49,7 +49,6 @@ class DBLog:
                     note TEXT
                 )
             """)
-        # ensure equity table exists
         if not _table_exists(self.con, "equity"):
             self.con.execute("""
                 CREATE TABLE IF NOT EXISTS equity (
@@ -74,12 +73,11 @@ class DBLog:
         )
         self.con.commit()
 
-    # ---------- public ----------
     def log_trade(
         self,
         ts: datetime,
         symbol: str,
-        side: str,          # 'BUY'/'SELL'
+        side: str,  # 'BUY'/'SELL'
         qty: float,
         price: float,
         pnl: float = 0.0,
@@ -87,16 +85,21 @@ class DBLog:
         stop: float | None = None,
         take_profit: float | None = None,
     ):
-        row = {"ts": ts.isoformat(), "symbol": symbol, "qty": float(qty), "price": float(price), "note": note}
+        row = {
+            "ts": ts.isoformat(),
+            "symbol": symbol,
+            "qty": float(qty),
+            "price": float(price),
+            "note": note,
+        }
 
-        # map to whatever columns exist
-        if "action" in self.trades_cols:       # your current schema
+        if "action" in self.trades_cols:
             row["action"] = side
             if "stop" in self.trades_cols:
                 row["stop"] = None if stop is None else float(stop)
             if "take_profit" in self.trades_cols:
                 row["take_profit"] = None if take_profit is None else float(take_profit)
-        if "side" in self.trades_cols:         # alternate schema
+        if "side" in self.trades_cols:
             row["side"] = side
         if "pnl" in self.trades_cols:
             row["pnl"] = float(pnl)

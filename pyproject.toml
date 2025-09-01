@@ -1,0 +1,21 @@
+[tool.ruff]
+line-length = 100
+src = ["bot"]
+exclude = [".venv", ".git", "cache", "backups", ".streamlit"]
+
+[tool.black]
+line-length = 100
+exclude = '''
+/(
+  \.venv
+| \.git
+| cache
+| backups
+| \.streamlit
+)/
+'''
+
+[tool.mypy]
+files = ["bot"]
+ignore_missing_imports = true
+pretty = true

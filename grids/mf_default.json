@@ -1,0 +1,19 @@
+{
+  "ATR_PCT_MIN": [
+    0.005,
+    0.01,
+    0.02
+  ],
+  "MAX_POSITIONS": [
+    3,
+    5
+  ],
+  "MOM_CONFIRM_K": [
+    1,
+    2
+  ],
+  "MOM_CONFIRM_M": [
+    3,
+    5
+  ]
+}

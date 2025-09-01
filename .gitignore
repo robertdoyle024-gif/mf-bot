@@ -1,22 +1,27 @@
-﻿# Python cache
+# Python
 __pycache__/
 *.pyc
-*.pyo
-*.pyd
-*.log
-
+.pytest_cache/
+.mypy_cache/
+ECHO is on.
 # Virtual env
 .venv/
-
-# Secrets / local config
+ECHO is on.
+# Local data/cache/results
+.cache/
+simple_bot.db
+*.parquet
+sweep_results.csv
+wf_*.csv
+quick_diag_*.csv
+*.log
+ECHO is on.
+# Secrets / env
 .env
-
-# Data / artifacts
-*.db
-cache/
-.streamlit/
-.ipynb_checkpoints/
-
-# OS cruft
-.DS_Store
-Thumbs.db
+.env.*
+best_params.env
+ECHO is on.
+# Build artifacts
+build/
+dist/
+*.spec
